@@ -1,5 +1,3 @@
-
-
 /////////////////////////////////////////////////
 // Cheat Menu Plugin Class
 /////////////////////////////////////////////////
@@ -336,7 +334,6 @@ Cheat_Menu.overlay.style.top = "5px";
 Cheat_Menu.overlay.style.right = "";
 Cheat_Menu.overlay.style.bottom = "";
 
-
 // Attach other css for styling
 Cheat_Menu.style_css = document.createElement("style");
 Cheat_Menu.style_css.innerHTML = "#cheat_menu{position:absolute;width:280px;height:100px;z-index:1000;background-color:#000;color:#fff;opacity:.75;text-align:center;padding:10px}#cheat_menu_text{position:absolute;width:300px;z-index:1001;background-color:transparent;color:#fff;opacity:1;text-align:center;padding:10px;border-spacing:0}.scroll_selector_row{width:100%;text-align:center}.scroll_selector_buttons:hover{color:#f00;text-shadow:0 0 5px #f00}.cheat_menu_buttons:hover{color:#f00;text-shadow:0 0 5px #f00}.cheat_menu_cell{border-bottom:1px solid #6f6f6f;max-width:100px;width:100px;font-weight:normal;font-size:15px;padding-top:5px;padding-bottom:5px}.cheat_menu_cell_title{max-width:100px;width:100px;font-weight:bold;font-size:20px;padding-top:8px;padding-bottom:5px}";
@@ -475,7 +472,8 @@ Cheat_Menu.append_scroll_selector = function(text, key1, key2, scroll_handler) {
 
 	scroll_left_button.addEventListener('mousedown', scroll_handler.bind(null, "left"));
 	scroll_right_button.addEventListener('mousedown', scroll_handler.bind(null, "right"));
-
+	scroll_left_button.addEventListener('touchstart', scroll_handler.bind(null, "left"));
+	scroll_right_button.addEventListener('touchstart', scroll_handler.bind(null, "right"));
 	Cheat_Menu.key_listeners[key1] = scroll_handler.bind(null, "left");
 	Cheat_Menu.key_listeners[key2] = scroll_handler.bind(null, "right");
 };
@@ -529,6 +527,7 @@ Cheat_Menu.append_cheat = function(cheat_text, status_text, key, click_handler) 
 	cheat.innerHTML = status_text + "[" + key + "]";
 
 	cheat.addEventListener('mousedown', click_handler);
+	cheat.addEventListener('touchstart', click_handler);
 	Cheat_Menu.key_listeners[key] = click_handler;
 };
 
@@ -1028,7 +1027,7 @@ Cheat_Menu.append_speed_status = function(key1, key2, key3) {
 	else {
 		status_text = "<font color='#ff0000'>true</font>";
 	}
-	Cheat_Menu.append_cheat("速度解锁", status_text, key3, Cheat_Menu.apply_speed_lock_toggle);
+	Cheat_Menu.append_cheat("速度锁定", status_text, key3, Cheat_Menu.apply_speed_lock_toggle);
 };
 
 // Left and right scrollers for handling switching between items selected
@@ -1629,6 +1628,9 @@ window.addEventListener("resize", Cheat_Menu.position_menu);
 Cheat_Menu.overlay.addEventListener("mousedown", function(event) {
 	event.stopPropagation();
 });
+Cheat_Menu.overlay.addEventListener("touchstart", function(event) {
+	event.stopPropagation();
+});
 
 
 
@@ -1657,13 +1659,7 @@ Cheat_Menu.keyCodes.KEYCODE_TILDE = {keyCode: 192, key_listener: '`'};
 Cheat_Menu.key_listeners = {};
 
 window.addEventListener("keydown", function(event) {
-	if (!event.ctrlKey && !event.altKey && (event.keyCode === 119) && $gameTemp && !$gameTemp.isPlaytest()) {
-		// open debug menu
-		event.stopPropagation();
-		event.preventDefault();
-		require('nw.gui').Window.get().showDevTools();
-	}
-	else if (!event.altKey && !event.ctrlKey && !event.shiftKey && (event.keyCode === 120) && $gameTemp && !$gameTemp.isPlaytest()) {
+	if (!event.altKey && !event.ctrlKey && !event.shiftKey && (event.keyCode === 120) && $gameTemp && !$gameTemp.isPlaytest()) {
 		// trick the game into thinking its a playtest so it will open the switch/variable debug menu
 		$gameTemp._isPlaytest = true;
 		setTimeout(function() {
@@ -1769,6 +1765,17 @@ Cheat_Menu.initialize = function() {
 	}, 1000);
 };
 Cheat_Menu.initialize();
+Cheat_Menu.overlay.onclick = 
+Cheat_Menu.overlay_box.onclick = 
+Cheat_Menu.overlay.ontouchstart = 
+Cheat_Menu.overlay_box.ontouchstart = function (e) {
+    e.preventDefault()
+    e.stopPropagation()
+}
+Cheat_Menu.overlay.ontouchend  = Cheat_Menu.overlay_box.ontouchend  = function (e) {
+    e.preventDefault()
+    e.stopPropagation()
+}
 // add hook for loading a game
 DataManager.default_loadGame = DataManager.loadGame;
 DataManager.loadGame = function(savefileId) {
