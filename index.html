@@ -132,7 +132,7 @@ var kb = {};
         if(m4a){
             if(/\.m4a$/i.test(o)){
                 o = o.replace(/\.m4a$/i,".ogg");
-            }else if(/\.rpgmvo$/i.test(o)){
+            }else if(/\.rpgmvm$/i.test(o)){
                 o = o.replace(/\.rpgmvm$/i,".rpgmvo");
             }
             if (cache[o]) return cache[o];
@@ -145,7 +145,7 @@ var kb = {};
         if(m4a){
             if(!objMap[o] && !cache[o] && /\.m4a$/i.test(o)){
                 o = o.replace(/\.m4a$/i,".ogg");
-            }else if(!objMap[o] && !cache[o] && /\.rpgmvo$/i.test(o)){
+            }else if(!objMap[o] && !cache[o] && /\.rpgmvm$/i.test(o)){
                 o = o.replace(/\.rpgmvm$/i,".rpgmvo");
             }
         }
