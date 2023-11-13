@@ -172,7 +172,7 @@ var kb = {};
     XMLHttpRequest.prototype.open = function (m, u, a) {
         if (u == "" || getFileName(u) == "") u = "index.html"
         if (check(u) && m != "POST") {
-            this._open.apply(this,"data:,");
+            this._open("GET","data:,");
             this._param = [m, u, a == false];
         } else {
             this._open.apply(this, arguments);
